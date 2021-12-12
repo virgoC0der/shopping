@@ -1,8 +1,6 @@
 package webbase
 
 import (
-	"encoding/json"
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,20 +19,8 @@ const (
 	KUserLogin = 1
 )
 
-func (ctx *UserCtx) GetUserCtx(c *gin.Context) *UserCtx {
-	session := sessions.Default(c)
-	iface := session.Get(UserLoginKey)
-	userSession, ok := iface.(string)
-	if !ok {
-		return nil
-	}
-
-	err := json.Unmarshal([]byte(userSession), ctx)
-	if err != nil {
-		return nil
-	}
-
-	return ctx
+func GetUserCtx(c *gin.Context) *UserCtx {
+	return c.MustGet(UserLoginKey).(*UserCtx)
 }
 
 func (ctx *UserCtx) SetUserCtx(userCtx *UserCtx) {

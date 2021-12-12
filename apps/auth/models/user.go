@@ -22,3 +22,17 @@ func GetUser(username string) (*mysql.User, error) {
 
 	return user, nil
 }
+
+func GetUserById(userId string) (*mysql.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
+	defer cancel()
+
+	user := &mysql.User{}
+	tx := mysql.GetDB(ctx).Where("id = ?", userId).Find(user)
+	if tx.Error != nil {
+		Logger.Warn("get user err", zap.Error(tx.Error))
+		return nil, tx.Error
+	}
+
+	return user, nil
+}

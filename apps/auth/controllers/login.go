@@ -53,6 +53,7 @@ func Login(c *gin.Context) {
 		Username: user.Username,
 		Phone:    user.Phone,
 	}
+	c.Set(webbase.UserLoginKey, su)
 	session.Set(webbase.LoginStatusKey, webbase.KUserLogin)
 	session.Set(webbase.UserLoginKey, su)
 	session.Save()
