@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/gob"
 	"os"
+
 	"time"
 
 	"github.com/gin-contrib/sessions"
@@ -13,7 +14,8 @@ import (
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 
-	"shopping/apps/auth/controllers"
+	"shopping/apps/api/controllers"
+	"shopping/apps/api/services"
 	. "shopping/utils/log"
 	"shopping/utils/mysql"
 	"shopping/utils/valid"
@@ -25,6 +27,11 @@ func main() {
 
 	if err := mysql.Init(); err != nil {
 		Logger.Error("init mysql err", zap.Error(err))
+		os.Exit(1)
+	}
+
+	if err := services.InitProductCache(); err != nil {
+		Logger.Error("init product cache err", zap.Error(err))
 		os.Exit(1)
 	}
 
@@ -44,6 +51,7 @@ func main() {
 	r.POST("/login", controllers.Login)
 	r.GET("/product_list", controllers.GetProductList)
 	r.GET("/product", controllers.GetProduct)
+	r.GET("/place_order", controllers.PlaceOrder)
 	r.GET("/user", controllers.GetUserInfo)
 	r.Run(":8080")
 }

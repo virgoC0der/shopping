@@ -7,8 +7,8 @@ import (
 	. "shopping/utils/log"
 	"shopping/utils/webbase"
 
-	"shopping/apps/auth/io"
-	"shopping/apps/auth/models"
+	"shopping/apps/api/io"
+	"shopping/apps/api/models"
 )
 
 // GetProductList 获取商品概览

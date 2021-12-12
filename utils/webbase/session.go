@@ -7,6 +7,7 @@ import (
 type UserCtx struct {
 	UserId   string `json:"UID"`
 	Username string `json:"UNM"`
+	Nickname string `json:"NKM"`
 	Phone    string `json:"PHO"`
 }
 

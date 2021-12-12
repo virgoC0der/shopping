@@ -31,6 +31,10 @@ type User struct {
 	Updated  string `json:"updated"   gorm:"column:updated"`
 }
 
+func (User) TableName() string {
+	return "user"
+}
+
 /*
 Product
 create table product
@@ -88,6 +92,10 @@ type Product struct {
 	Updated           string  `json:"updated"            gorm:"column:updated"`
 }
 
+func (Product) TableName() string {
+	return "product"
+}
+
 /*
 Category
 create table category
@@ -102,13 +110,50 @@ create table category
     updated   char(20) null comment '更新时间'
 )
     charset = utf8;
- */
+*/
 type Category struct {
-	Id        int64  `json:"id"        gorm:"column:id"`
-    Name      string `json:"name"      gorm:"column:name"`
-    ParentId  int64  `json:"parent_id" gorm:"column:parent_id"`
-    Level     int    `json:"level"     gorm:"column:level"`
-    Sort      int    `json:"sort"      gorm:"column:sort"`
-    Created   string `json:"created"   gorm:"column:created"`
-    Updated   string `json:"updated"   gorm:"column:updated"`
+	Id       int64  `json:"id"        gorm:"column:id"`
+	Name     string `json:"name"      gorm:"column:name"`
+	ParentId int64  `json:"parent_id" gorm:"column:parent_id"`
+	Level    int    `json:"level"     gorm:"column:level"`
+	Sort     int    `json:"sort"      gorm:"column:sort"`
+	Created  string `json:"created"   gorm:"column:created"`
+	Updated  string `json:"updated"   gorm:"column:updated"`
+}
+
+func (Category) TableName() string {
+	return "category"
+}
+
+/*
+Order
+create table `order`
+(
+    id           bigint unsigned auto_increment comment '订单id'
+        primary key,
+    product_item varchar(20)    null comment '商品项',
+    total_price  decimal(20, 2) null comment '合计',
+    status       char(20)       null comment '订单状态',
+    address_id   bigint         null comment '地址id',
+    user_id      varchar(200)   null comment '用户id',
+    nick_name    char(50)       null comment '用户昵称',
+    created      char(50)       null comment '创建时间',
+    updated      char(50)       null comment '更新时间'
+)
+    charset = utf8;
+*/
+type Order struct {
+	Id          int64   `json:"id"           gorm:"column:id"`
+	ProductItem string  `json:"product_item" gorm:"column:product_item"`
+	TotalPrice  float64 `json:"total_price"  gorm:"column:total_price"`
+	Status      string  `json:"status"       gorm:"column:status"`
+	AddressId   int64   `json:"address_id"   gorm:"column:address_id"`
+	UserId      string  `json:"user_id"      gorm:"column:user_id"`
+	NickName    string  `json:"nick_name"    gorm:"column:nick_name"`
+	Created     string  `json:"created"      gorm:"column:created"`
+	Updated     string  `json:"updated"      gorm:"column:updated"`
+}
+
+func (Order) TableName() string {
+	return "order"
 }

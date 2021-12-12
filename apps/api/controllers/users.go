@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
-	"shopping/apps/auth/models"
+	"shopping/apps/api/models"
 	. "shopping/utils/log"
 	"shopping/utils/webbase"
 )

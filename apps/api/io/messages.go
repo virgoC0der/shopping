@@ -30,9 +30,24 @@ type ProductInfo struct {
 }
 
 type GetProductRequest struct {
-	ProductIds []int `form:"product_ids"  binding:"required"`
+	ProductIds []int `form:"product_ids"  binding:"required,max=100"`
 }
 
 type GetProductResp struct {
 	ProductList []*mysql.Product `json:"product_list"`
+}
+
+type PlaceOrderReq struct {
+	AddressId int64        `json:"address_id" binding:"required,min=0"`
+	Items     []*OrderItem `json:"items"      binding:"required,max=100"`
+}
+
+type OrderItem struct {
+	ProductId int64   `json:"product_id"  binding:"required,min=1"`
+	Price     float64 `json:"price"  binding:"required,min=0"`
+	Count     int     `json:"count"       binding:"required,min=1,max=100"`
+}
+
+type PlaceOrderResp struct {
+	OrderId int64 `json:"order_id"`
 }

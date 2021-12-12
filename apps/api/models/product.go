@@ -50,3 +50,31 @@ func QueryProductList(offset, limit int) ([]*mysql.Product, error) {
 
 	return products, nil
 }
+
+func QueryOneProductById(id int64) (*mysql.Product, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
+	defer cancel()
+
+	product := &mysql.Product{}
+	err := mysql.GetDB(ctx).Where("id = ?", id).First(product).Error
+	if err != nil {
+		Logger.Warn("query product by id err", zap.Error(err))
+		return nil, err
+	}
+
+	return product, nil
+}
+
+func QueryAllProducts() ([]*mysql.Product, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
+	defer cancel()
+
+	products := make([]*mysql.Product, 0)
+	err := mysql.GetDB(ctx).Order("id DESC").Find(&products).Error
+	if err != nil {
+		Logger.Warn("query all products err", zap.Error(err))
+		return nil, err
+	}
+
+	return products, nil
+}
