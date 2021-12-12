@@ -33,7 +33,7 @@ func main() {
 	gob.Register(webbase.UserCtx{})
 	store := cookie.NewStore([]byte("secret"))
 
-	r.Use(sessions.Sessions("user_session", store))
+	r.Use(sessions.Sessions(webbase.UserLoginKey, store))
 	r.Use(ginzap.Ginzap(Logger, time.RFC3339, true))
 	r.Use(ginzap.RecoveryWithZap(Logger, true))
 
@@ -42,6 +42,8 @@ func main() {
 	}
 
 	r.POST("/login", controllers.Login)
+	r.GET("/product_list", controllers.GetProductList)
 	r.GET("/product", controllers.GetProduct)
+	r.GET("/user", controllers.GetUserInfo)
 	r.Run(":8080")
 }

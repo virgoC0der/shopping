@@ -14,11 +14,39 @@ func QueryProductById(productId []int) ([]*mysql.Product, error) {
 	defer cancel()
 
 	products := make([]*mysql.Product, 0, len(productId))
-    err := mysql.GetDB(ctx).Where("id IN ?", productId).Find(products).Error
-    if err != nil {
-    	Logger.Warn("query product by id err", zap.Error(err))
-        return nil, err
-    }
+	err := mysql.GetDB(ctx).Where("id IN ?", productId).Find(products).Error
+	if err != nil {
+		Logger.Warn("query product by id err", zap.Error(err))
+		return nil, err
+	}
 
-    return products, nil
+	return products, nil
+}
+
+func QueryProductCount() (int64, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
+	defer cancel()
+
+	var count int64
+	err := mysql.GetDB(ctx).Model(&mysql.Product{}).Count(&count).Error
+	if err != nil {
+		Logger.Warn("query product count err", zap.Error(err))
+		return 0, err
+	}
+
+	return count, nil
+}
+
+func QueryProductList(offset, limit int) ([]*mysql.Product, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
+	defer cancel()
+
+	products := make([]*mysql.Product, 0, limit)
+	err := mysql.GetDB(ctx).Offset(offset).Limit(limit).Find(&products).Error
+	if err != nil {
+		Logger.Warn("query product by id err", zap.Error(err))
+		return nil, err
+	}
+
+	return products, nil
 }

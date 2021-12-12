@@ -23,7 +23,7 @@ func Login(c *gin.Context) {
 	}
 
 	session := sessions.Default(c)
-	iface := session.Get("user")
+	iface := session.Get(webbase.UserLoginKey)
 
 	userSession, ok := iface.(string)
 	if !ok {
