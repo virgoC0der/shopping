@@ -56,3 +56,12 @@ type TopUpReq struct {
 	UserId string `json:"user_id"`
 	Money  int    `json:"money"   binding:"required,min=0"`
 }
+
+type GetUserInfoResp struct {
+	Id       string         `json:"id"`
+	Username string         `json:"username"`
+	RealName string         `json:"real_name"`
+	Phone    string         `json:"phone"`
+	Balance  int            `json:"balance"`
+	Orders   []*mysql.Order `json:"orders"`
+}

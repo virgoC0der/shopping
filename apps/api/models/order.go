@@ -41,3 +41,17 @@ func InsertOrderTrans(order *mysql.Order, productId2Cnt map[int64]int) (int64, e
 
 	return order.Id, nil
 }
+
+func QueryOrders(userId string) ([]*mysql.Order, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
+	defer cancel()
+
+	orders := make([]*mysql.Order, 0)
+	err := mysql.GetDB(ctx).Where("user_id = ?", userId).Find(&orders).Error
+	if err != nil {
+		Logger.Warn("query orders err", zap.Error(err))
+		return nil, err
+	}
+
+	return orders, nil
+}

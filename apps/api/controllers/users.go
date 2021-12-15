@@ -3,7 +3,7 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-
+	"shopping/apps/api/io"
 	"shopping/apps/api/models"
 	. "shopping/utils/log"
 	"shopping/utils/webbase"
@@ -18,5 +18,20 @@ func GetUserInfo(c *gin.Context) {
 		return
 	}
 
-	webbase.ServeResponse(c, webbase.ErrOK, user)
+	orders, err := models.QueryOrders(ctx.UserId)
+	if err != nil {
+		Logger.Warn("query orders err", zap.Error(err))
+		webbase.ServeResponse(c, webbase.ErrSystemBusy)
+		return
+	}
+
+	resp := &io.GetUserInfoResp{
+		Id:       user.Id,
+		Username: user.Username,
+		RealName: user.RealName,
+		Phone:    user.Phone,
+		Balance:  user.Balance,
+		Orders:   orders,
+	}
+	webbase.ServeResponse(c, webbase.ErrOK, resp)
 }
