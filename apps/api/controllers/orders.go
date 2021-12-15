@@ -47,10 +47,9 @@ func PlaceOrder(c *gin.Context) {
 		}
 
 		// 库存不足，不能下单，
-		// todo: 回滚cache
 		if count < item.Count {
-			services.Product2Count.Unlock()
 			services.Product2Count.Cache = originCache
+			services.Product2Count.Unlock()
 			webbase.ServeResponse(c, ErrProductNotEnough)
 			return
 		}
@@ -77,15 +76,16 @@ func PlaceOrder(c *gin.Context) {
 		Updated:     nowStr,
 	}
 
-	orderId, err := models.InsertOrder(order)
+	services.Product2Count.Lock()
+	orderId, err := models.InsertOrderTrans(order, services.Product2Count.Cache)
 	if err != nil {
 		Logger.Warn("insert order err", zap.Error(err))
-		// 回滚cache
-		// todo: 回滚product表
 		services.Product2Count.Cache = originCache
+		services.Product2Count.Unlock()
 		webbase.ServeResponse(c, webbase.ErrSystemBusy)
 		return
 	}
+	services.Product2Count.Unlock()
 
 	resp := &io.PlaceOrderResp{
 		OrderId: orderId,

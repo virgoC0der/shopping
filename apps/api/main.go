@@ -51,7 +51,8 @@ func main() {
 	r.POST("/login", controllers.Login)
 	r.GET("/product_list", controllers.GetProductList)
 	r.GET("/product", controllers.GetProduct)
-	r.GET("/place_order", controllers.PlaceOrder)
+	r.POST("/place_order", controllers.PlaceOrder)
 	r.GET("/user", controllers.GetUserInfo)
+	r.POST("/balance/top_up", controllers.TopUpBalance)
 	r.Run(":8080")
 }

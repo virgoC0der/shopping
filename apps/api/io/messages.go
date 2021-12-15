@@ -51,3 +51,8 @@ type OrderItem struct {
 type PlaceOrderResp struct {
 	OrderId int64 `json:"order_id"`
 }
+
+type TopUpReq struct {
+	UserId string `json:"user_id"`
+	Money  int    `json:"money"   binding:"required,min=0"`
+}
