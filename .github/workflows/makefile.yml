@@ -13,12 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    
-    - name: configure
-      run: ./configure
       
     - name: Install dependencies
-      run: make
+      run: go mode tidy
       
     - name: Run check
       run: make build
