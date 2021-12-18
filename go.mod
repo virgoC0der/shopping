@@ -1,6 +1,6 @@
 module shopping
 
-go 1.17
+go 1.15
 
 require (
 	github.com/gin-contrib/sessions v0.0.4
