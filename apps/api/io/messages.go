@@ -44,7 +44,7 @@ type PlaceOrderReq struct {
 
 type OrderItem struct {
 	ProductId int64   `json:"product_id"  binding:"required,min=1"`
-	Price     float64 `json:"price"  binding:"required,min=0"`
+	Price     float64 `json:"price"       binding:"required,min=0"`
 	Count     int     `json:"count"       binding:"required,min=1,max=100"`
 }
 
@@ -62,6 +62,6 @@ type GetUserInfoResp struct {
 	Username string         `json:"username"`
 	RealName string         `json:"real_name"`
 	Phone    string         `json:"phone"`
-	Balance  int            `json:"balance"`
+	Balance  float64        `json:"balance"`
 	Orders   []*mysql.Order `json:"orders"`
 }

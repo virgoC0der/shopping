@@ -16,7 +16,7 @@ type ProductCache struct {
 	Cache map[int64]int
 }
 
-var Product2Count *ProductCache
+var Product2Count sync.Map
 
 func InitProductCache() error {
 	products, err := models.QueryAllProducts()
@@ -29,13 +29,8 @@ func InitProductCache() error {
 		return nil
 	}
 
-	Product2Count = &ProductCache{
-		Cache: make(map[int64]int, len(products)),
-	}
 	for _, product := range products {
-		Product2Count.Lock()
-		Product2Count.Cache[product.Id] = product.Amount
-		Product2Count.Unlock()
+		Product2Count.Store(product.Id, product.Amount)
 	}
 
 	return nil

@@ -52,6 +52,8 @@ func Login(c *gin.Context) {
 		UserId:   user.Id,
 		Username: user.Username,
 		Phone:    user.Phone,
+		Nickname: user.RealName,
+		Balance:  user.Balance,
 	}
 	c.Set(webbase.UserLoginKey, su)
 	session.Set(webbase.LoginStatusKey, webbase.KUserLogin)

@@ -19,16 +19,16 @@ create table user
     charset = utf8;
 */
 type User struct {
-	Id       string `json:"id"        gorm:"primaryKey;column:id"`
-	Username string `json:"username"  gorm:"column:username"`
-	RealName string `json:"real_name" gorm:"column:real_name"`
-	RoleId   int    `json:"role_id"   gorm:"column:role_id"`
-	Password string `json:"password"  gorm:"column:password"`
-	Phone    string `json:"phone"     gorm:"column:phone"`
-	Balance  int    `json:"balance"   gorm:"column:balance"`
-	Status   int    `json:"status"    gorm:"column:status"`
-	Created  string `json:"created"   gorm:"column:created"`
-	Updated  string `json:"updated"   gorm:"column:updated"`
+	Id       string  `json:"id"        gorm:"primaryKey;column:id"`
+	Username string  `json:"username"  gorm:"column:username"`
+	RealName string  `json:"real_name" gorm:"column:real_name"`
+	RoleId   int     `json:"role_id"   gorm:"column:role_id"`
+	Password string  `json:"password"  gorm:"column:password"`
+	Phone    string  `json:"phone"     gorm:"column:phone"`
+	Balance  float64 `json:"balance"   gorm:"column:balance"`
+	Status   int     `json:"status"    gorm:"column:status"`
+	Created  string  `json:"created"   gorm:"column:created"`
+	Updated  string  `json:"updated"   gorm:"column:updated"`
 }
 
 func (User) TableName() string {

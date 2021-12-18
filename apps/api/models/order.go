@@ -4,26 +4,39 @@ import (
 	"context"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
+	"shopping/apps/api/io"
 
 	. "shopping/utils/log"
 	"shopping/utils/mysql"
 )
 
-func InsertOrderTrans(order *mysql.Order, productId2Cnt map[int64]int) (int64, error) {
+func InsertOrderTrans(order *mysql.Order, items []*io.OrderItem) (int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
 	defer cancel()
 
 	err := mysql.GetDB(ctx).Transaction(func(tx *gorm.DB) error {
 		var err error
-		err = tx.Create(order).Error
+		// 更新用户余额
+		err = tx.Model(&mysql.User{}).
+			Where("id = ?", order.UserId).
+			Update("balance = balance - ?", order.TotalPrice).Error
 		if err != nil {
+			Logger.Warn("update user balance err", zap.Error(err))
 			return err
 		}
 
-		for productId, cnt := range productId2Cnt {
+		// 插入订单
+		err = tx.Create(order).Error
+		if err != nil {
+			Logger.Warn("insert order err", zap.Error(err))
+			return err
+		}
+
+		// 更新商品数量
+		for _, item := range items {
 			err = tx.Model(&mysql.Product{}).
-				Where("id = ?", productId).
-				Update("count", cnt).
+				Where("id = ?", item.ProductId).
+				Update("count = count - ?", item.Count).
 				Error
 			if err != nil {
 				Logger.Warn("update product count err", zap.Error(err))

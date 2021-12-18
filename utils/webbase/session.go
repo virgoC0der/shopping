@@ -5,10 +5,11 @@ import (
 )
 
 type UserCtx struct {
-	UserId   string `json:"UID"`
-	Username string `json:"UNM"`
-	Nickname string `json:"NKM"`
-	Phone    string `json:"PHO"`
+	UserId   string  `json:"UID"`
+	Username string  `json:"UNM"`
+	Nickname string  `json:"NKM"`
+	Phone    string  `json:"PHO"`
+	Balance  float64 `json:"balance"`
 }
 
 const (
@@ -22,12 +23,6 @@ const (
 
 func GetUserCtx(c *gin.Context) *UserCtx {
 	return c.MustGet(UserLoginKey).(*UserCtx)
-}
-
-func (ctx *UserCtx) SetUserCtx(userCtx *UserCtx) {
-	ctx.UserId = userCtx.UserId
-	ctx.Username = userCtx.Username
-	ctx.Phone = userCtx.Phone
 }
 
 func (ctx *UserCtx) GetUserId() string {

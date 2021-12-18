@@ -41,15 +41,10 @@ func UpdateUserBalance(userId string, balance int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
 	defer cancel()
 
-	user := &mysql.User{}
-	tx := mysql.GetDB(ctx).Where("id = ?", userId).Find(user)
-	if tx.Error != nil {
-		Logger.Warn("get user err", zap.Error(tx.Error))
-		return tx.Error
-	}
-
-	user.Balance = balance
-	tx = mysql.GetDB(ctx).Where("id = ?", userId).Update("balance", user.Balance)
+	tx := mysql.GetDB(ctx).
+		Model(&mysql.User{}).
+		Where("id = ?", userId).
+		Update("balance = balance + ?", balance)
 	if tx.Error != nil {
 		Logger.Warn("update user err", zap.Error(tx.Error))
 		return tx.Error

@@ -12,4 +12,9 @@ var (
 		Code:    2002,
 		Message: "商品库存不足",
 	}
+
+	ErrBalanceNotEnough = &webbase.CommonResp{
+		Code:    2003,
+		Message: "余额不足",
+	}
 )
