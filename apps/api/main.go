@@ -50,7 +50,7 @@ func main() {
 
 	r.POST("/login", controllers.Login)
 	r.GET("/product_list", controllers.GetProductList)
-	r.GET("/product", controllers.GetProduct)
+	r.POST("/product", controllers.GetProduct)
 	r.POST("/place_order", controllers.PlaceOrder)
 	r.GET("/user", controllers.GetUserInfo)
 	r.POST("/balance/top_up", controllers.TopUpBalance)

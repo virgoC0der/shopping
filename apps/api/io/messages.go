@@ -5,13 +5,13 @@ import (
 )
 
 type LoginRequest struct {
-	Username string `json:"username"  binding:"required;username"`
-	Password string `json:"password"  binding:"required;password"`
+	Username string `json:"username"  binding:"required,username"`
+	Password string `json:"password"  binding:"required,password"`
 }
 
 type GetProductListRequest struct {
-	PageIndex int `json:"page_index"  binding:"required;min=0"`
-	PageSize  int `json:"page_size"   binding:"required;min=10,max=100"`
+	PageIndex int `form:"page_index"  binding:"min=0"`
+	PageSize  int `form:"page_size"   binding:"required,min=10,max=100"`
 }
 
 type GetProductListResp struct {
@@ -30,7 +30,7 @@ type ProductInfo struct {
 }
 
 type GetProductRequest struct {
-	ProductIds []int `form:"product_ids"  binding:"required,max=100"`
+	ProductIds []int `json:"product_ids"  binding:"required,max=100"`
 }
 
 type GetProductResp struct {

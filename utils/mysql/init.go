@@ -25,12 +25,13 @@ type MysqlOption struct {
 
 const (
 	confPath         = "/Users/chensx/Desktop/Go/shopping/utils/mysql/conf/mysql.ini"
-	mysqlUrlTemplate = "%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=true&loc=Asia%2FShanghai"
+	mysqlUrlTemplate = "%s:%s@tcp(%s:%d)/%s"
+	mysqlSuffix      = "?charset=utf8&parseTime=true&loc=Asia%2FShanghai"
 )
 
 var (
 	globalDB *gorm.DB
-	Timeout time.Duration
+	Timeout  time.Duration
 )
 
 func Init() error {
@@ -49,7 +50,7 @@ func Init() error {
 	Timeout = time.Duration(opt.Timeout) * time.Second
 
 	url := fmt.Sprintf(mysqlUrlTemplate, opt.Username, opt.Password, opt.Addr, opt.Port, opt.DefaultDB)
-	globalDB, err = gorm.Open(mysql.Open(url), &gorm.Config{})
+	globalDB, err = gorm.Open(mysql.Open(url+mysqlSuffix), &gorm.Config{})
 	if err != nil {
 		Logger.Warn("open mysql failed, err", zap.Error(err))
 		return err

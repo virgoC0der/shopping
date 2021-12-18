@@ -7,8 +7,8 @@ import (
 var valid *validator.Validate
 
 func init() {
-    valid = validator.New()
-    Register(valid)
+	valid = validator.New()
+	Register(valid)
 }
 
 func Register(v *validator.Validate) {
@@ -17,9 +17,9 @@ func Register(v *validator.Validate) {
 }
 
 func validUsername(fl validator.FieldLevel) bool {
-	return UsernameRegex.Match(fl.Field().Bytes())
+	return UsernameRegex.MatchString(fl.Field().String())
 }
 
 func validPassword(fl validator.FieldLevel) bool {
-    return PasswordRegex.Match(fl.Field().Bytes())
+	return PasswordRegex.MatchString(fl.Field().String())
 }

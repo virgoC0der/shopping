@@ -14,7 +14,7 @@ import (
 // GetProductList 获取商品概览
 func GetProductList(c *gin.Context) {
 	req := &io.GetProductListRequest{}
-	if err := c.ShouldBindJSON(req); err != nil {
+	if err := c.Bind(req); err != nil {
 		Logger.Warn("valid get product_list req err",
 			zap.Error(err), zap.Any("req", req))
 		webbase.ServeResponse(c, webbase.ErrInputParams)
@@ -60,7 +60,7 @@ func GetProductList(c *gin.Context) {
 // GetProduct 获取商品
 func GetProduct(c *gin.Context) {
 	req := &io.GetProductRequest{}
-	if err := c.ShouldBindQuery(req); err != nil {
+	if err := c.ShouldBindJSON(req); err != nil {
 		Logger.Error("valid get product req err",
 			zap.Error(err), zap.Any("req", req))
 		webbase.ServeResponse(c, webbase.ErrInputParams)

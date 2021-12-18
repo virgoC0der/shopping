@@ -9,7 +9,7 @@ type UserCtx struct {
 	Username string  `json:"UNM"`
 	Nickname string  `json:"NKM"`
 	Phone    string  `json:"PHO"`
-	Balance  float64 `json:"balance"`
+	Balance  float64 `json:"BAL"`
 }
 
 const (
