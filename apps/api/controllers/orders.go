@@ -60,6 +60,7 @@ func PlaceOrder(c *gin.Context) {
 
 		// 库存不足，不能下单，
 		if count.(int) < item.Count {
+			Logger.Warn("product not enough", zap.Int64("product_id", item.ProductId))
 			webbase.ServeResponse(c, ErrProductNotEnough)
 			return
 		}

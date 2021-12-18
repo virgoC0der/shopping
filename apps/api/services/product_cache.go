@@ -10,12 +10,6 @@ import (
 	. "shopping/utils/log"
 )
 
-type ProductCache struct {
-	sync.Mutex
-
-	Cache map[int64]int
-}
-
 var Product2Count sync.Map
 
 func InitProductCache() error {

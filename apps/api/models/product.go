@@ -2,8 +2,6 @@ package models
 
 import (
 	"context"
-	"gorm.io/gorm"
-
 	"go.uber.org/zap"
 
 	. "shopping/utils/log"
@@ -78,29 +76,4 @@ func QueryAllProducts() ([]*mysql.Product, error) {
 	}
 
 	return products, nil
-}
-
-func UpdateProductsCount(productId2Cnt map[int64]int) error {
-	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
-	defer cancel()
-
-	err := mysql.GetDB(ctx).Transaction(func(tx *gorm.DB) error {
-		for productId, cnt := range productId2Cnt {
-			err := tx.Model(&mysql.Product{}).Where("id = ?", productId).Update("count", cnt).Error
-			if err != nil {
-				Logger.Warn("update product count err", zap.Error(err))
-				return err
-			}
-		}
-
-		// 返回nil，提交事务
-		return nil
-	})
-
-	if err != nil {
-		Logger.Warn("update products count err", zap.Error(err))
-		return err
-	}
-
-	return nil
 }
