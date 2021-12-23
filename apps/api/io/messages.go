@@ -1,7 +1,7 @@
 package io
 
 import (
-	"shopping/utils/mysql"
+	"shopping/utils/mysql/shopping"
 )
 
 type LoginRequest struct {
@@ -34,7 +34,7 @@ type GetProductRequest struct {
 }
 
 type GetProductResp struct {
-	ProductList []*mysql.Product `json:"product_list"`
+	ProductList []*shopping.Product `json:"product_list"`
 }
 
 type PlaceOrderReq struct {
@@ -58,10 +58,10 @@ type TopUpReq struct {
 }
 
 type GetUserInfoResp struct {
-	Id       string         `json:"id"`
-	Username string         `json:"username"`
-	RealName string         `json:"real_name"`
-	Phone    string         `json:"phone"`
-	Balance  float64        `json:"balance"`
-	Orders   []*mysql.Order `json:"orders"`
+	Id       string            `json:"id"`
+	Username string            `json:"username"`
+	RealName string            `json:"real_name"`
+	Phone    string            `json:"phone"`
+	Balance  float64           `json:"balance"`
+	Orders   []*shopping.Order `json:"orders"`
 }

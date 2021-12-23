@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"shopping/utils/mysql/shopping"
 
 	"go.uber.org/zap"
 
@@ -9,11 +10,11 @@ import (
 	"shopping/utils/mysql"
 )
 
-func GetUser(username string) (*mysql.User, error) {
+func GetUser(username string) (*shopping.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
 	defer cancel()
 
-	user := &mysql.User{}
+	user := &shopping.User{}
 	tx := mysql.GetDB(ctx).Where("username = ?", username).Find(user)
 	if tx.Error != nil {
 		Logger.Warn("get user err", zap.Error(tx.Error))
@@ -23,11 +24,11 @@ func GetUser(username string) (*mysql.User, error) {
 	return user, nil
 }
 
-func GetUserById(userId string) (*mysql.User, error) {
+func GetUserById(userId string) (*shopping.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
 	defer cancel()
 
-	user := &mysql.User{}
+	user := &shopping.User{}
 	tx := mysql.GetDB(ctx).Where("id = ?", userId).Find(user)
 	if tx.Error != nil {
 		Logger.Warn("get user err", zap.Error(tx.Error))
@@ -42,7 +43,7 @@ func UpdateUserBalance(userId string, balance int) error {
 	defer cancel()
 
 	tx := mysql.GetDB(ctx).
-		Model(&mysql.User{}).
+		Model(&shopping.User{}).
 		Where("id = ?", userId).
 		Update("balance = balance + ?", balance)
 	if tx.Error != nil {

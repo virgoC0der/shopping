@@ -19,4 +19,16 @@ var (
 		Code:    10002,
 		Message: "客户端输入错误",
 	}
+	ErrAuthFailed = &CommonResp{
+		Code:    10003,
+		Message: "认证失败",
+	}
+	ErrNotLogin = &CommonResp{
+		Code:    10004,
+		Message: "未登录",
+	}
+	ErrNoPermission = &CommonResp{
+		Code:    10005,
+		Message: "无权限访问",
+	}
 )

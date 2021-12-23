@@ -13,7 +13,7 @@ import (
 	"shopping/apps/api/models"
 	"shopping/apps/api/services"
 	. "shopping/utils/log"
-	"shopping/utils/mysql"
+	"shopping/utils/mysql/shopping"
 	"shopping/utils/webbase"
 )
 
@@ -82,7 +82,7 @@ func PlaceOrder(c *gin.Context) {
 		items = append(items, strconv.Itoa(int(item.ProductId)))
 	}
 	nowStr := time.Now().Format(kTimeLayout)
-	order := &mysql.Order{
+	order := &shopping.Order{
 		ProductItem: strings.Join(items, ","),
 		TotalPrice:  price,
 		UserId:      ctx.UserId,

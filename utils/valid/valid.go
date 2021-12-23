@@ -14,6 +14,7 @@ func init() {
 func Register(v *validator.Validate) {
 	v.RegisterValidation("username", validUsername)
 	v.RegisterValidation("password", validPassword)
+	v.RegisterValidation("timestamp", validTimestamp)
 }
 
 func validUsername(fl validator.FieldLevel) bool {
@@ -22,4 +23,8 @@ func validUsername(fl validator.FieldLevel) bool {
 
 func validPassword(fl validator.FieldLevel) bool {
 	return PasswordRegex.MatchString(fl.Field().String())
+}
+
+func validTimestamp(fl validator.FieldLevel) bool {
+	return !(0 <= fl.Field().Int() && fl.Field().Int() <= 253370736000)
 }

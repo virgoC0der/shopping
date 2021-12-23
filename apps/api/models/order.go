@@ -5,19 +5,20 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"shopping/apps/api/io"
+	"shopping/utils/mysql/shopping"
 
 	. "shopping/utils/log"
 	"shopping/utils/mysql"
 )
 
-func InsertOrderTrans(order *mysql.Order, items []*io.OrderItem) (int64, error) {
+func InsertOrderTrans(order *shopping.Order, items []*io.OrderItem) (int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
 	defer cancel()
 
 	err := mysql.GetDB(ctx).Transaction(func(tx *gorm.DB) error {
 		var err error
 		// 更新用户余额
-		err = tx.Model(&mysql.User{}).
+		err = tx.Model(&shopping.User{}).
 			Where("id = ?", order.UserId).
 			Update("balance = balance - ?", order.TotalPrice).Error
 		if err != nil {
@@ -34,7 +35,7 @@ func InsertOrderTrans(order *mysql.Order, items []*io.OrderItem) (int64, error) 
 
 		// 更新商品数量
 		for _, item := range items {
-			err = tx.Model(&mysql.Product{}).
+			err = tx.Model(&shopping.Product{}).
 				Where("id = ?", item.ProductId).
 				Update("count = count - ?", item.Count).
 				Error
@@ -55,11 +56,11 @@ func InsertOrderTrans(order *mysql.Order, items []*io.OrderItem) (int64, error) 
 	return order.Id, nil
 }
 
-func QueryOrders(userId string) ([]*mysql.Order, error) {
+func QueryOrders(userId string) ([]*shopping.Order, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), mysql.Timeout)
 	defer cancel()
 
-	orders := make([]*mysql.Order, 0)
+	orders := make([]*shopping.Order, 0)
 	err := mysql.GetDB(ctx).Where("user_id = ?", userId).Find(&orders).Error
 	if err != nil {
 		Logger.Warn("query orders err", zap.Error(err))
