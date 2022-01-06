@@ -1,4 +1,5 @@
 # shopping
+## 1. 商城后台
 ### 考点：
 -	并发安全
 -	基础知识应用(map、channel、go、锁)
@@ -15,4 +16,4 @@
 3. 编写api实现下单功能
 4. 编写api实现充值功能(可充值给他人)
 
-### 2. 监控agent&server
+## 2. 监控agent&server
