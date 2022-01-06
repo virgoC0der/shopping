@@ -4,7 +4,6 @@ import (
 	"encoding/gob"
 	"go.uber.org/zap"
 	"os"
-	"shopping/utils/mongo"
 	"time"
 
 	"github.com/gin-contrib/sessions"
@@ -14,7 +13,9 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+
 	. "shopping/utils/log"
+	"shopping/utils/mongo"
 	"shopping/utils/valid"
 	"shopping/utils/webbase"
 
