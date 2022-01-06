@@ -14,12 +14,12 @@ import (
 )
 
 type MongoDBConfig struct {
-	uri      string
 	host     string `ini:"host"`
 	username string `ini:"username"`
 	password string `ini:"password"`
 	poolSize uint64 `ini:"pool_size"`
 	timeout  int    `ini:"timeout"`
+	uri      string
 }
 
 const (
@@ -48,7 +48,9 @@ func Init() error {
 		return err
 	}
 
+	Logger.Info("mongo config", zap.Any("opt", opt))
 	opt.uri = fmt.Sprintf(kMongoUriTemplate, opt.username, opt.password, opt.host)
+	Logger.Info("mongo uri", zap.String("uri", opt.uri))
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	client, err = mongo.Connect(ctx, options.Client().ApplyURI(opt.uri).SetMaxPoolSize(opt.poolSize))

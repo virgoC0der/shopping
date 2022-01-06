@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/gob"
+	"go.uber.org/zap"
 	"os"
-	"shopping/apps/monitor_server/controllers"
-	"shopping/apps/monitor_server/middleware"
+	"shopping/utils/mongo"
 	"time"
 
 	"github.com/gin-contrib/sessions"
@@ -13,12 +13,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
-	"go.uber.org/zap"
-
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	. "shopping/utils/log"
-	"shopping/utils/mongo"
 	"shopping/utils/valid"
 	"shopping/utils/webbase"
+
+	"shopping/apps/monitor_server/controllers"
+	"shopping/apps/monitor_server/middleware"
+	"shopping/apps/monitor_server/middleware/prometheus"
 )
 
 func main() {
@@ -37,6 +39,8 @@ func main() {
 	r.Use(sessions.Sessions(webbase.UserLoginKey, store))
 	r.Use(ginzap.Ginzap(Logger, time.RFC3339, true))
 	r.Use(ginzap.RecoveryWithZap(Logger, true))
+	gp := prometheus.New(r)
+	r.Use(gp.Middleware())
 
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		valid.Register(v)
@@ -62,5 +66,7 @@ func main() {
 		admin.POST("/log", controllers.GetUserLog)
 	}
 
-	r.Run(":8080")
+	// prometheus metrics collect api
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
+	r.Run(":8081")
 }
