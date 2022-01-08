@@ -24,16 +24,35 @@ const (
 	kCollectApi = "http://127.0.0.1:8081/api/v1/monitor/collect"
 )
 
+type Monitor interface {
+	Collect() (string, error)
+}
+
+type CPU struct {
+}
+
+// Collect collects cpu information.
+// TODO: collect cpu info
+func (c *CPU) Collect() (string, error) {
+	return "", nil
+}
+
 func Run() {
-	t := time.NewTicker(time.Minute * 1)
+	t := time.NewTicker(time.Minute)
+	// 每分钟上报一次
 	for {
+		start := time.Now()
 		err := CollectData()
 		if err != nil {
 			Logger.Warn("collect data err", zap.Error(err))
 		}
+		cost := time.Since(start)
+		if cost > time.Minute {
+			continue
+		}
+		t.Reset(time.Minute - cost)
 		<-t.C
 	}
-
 }
 
 func CollectData() error {

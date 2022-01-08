@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/gob"
-	"go.uber.org/zap"
 	"os"
 	"time"
 
@@ -13,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"go.uber.org/zap"
 
 	. "shopping/utils/log"
 	"shopping/utils/mongo"
@@ -35,7 +35,7 @@ func main() {
 	r := gin.New()
 	// 初始化session
 	gob.Register(webbase.MonitorUserCtx{})
-	store := cookie.NewStore([]byte("secret"))
+	store := cookie.NewStore([]byte("monitor_server"))
 
 	r.Use(sessions.Sessions(webbase.UserLoginKey, store))
 	r.Use(ginzap.Ginzap(Logger, time.RFC3339, true))

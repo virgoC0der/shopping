@@ -11,6 +11,7 @@ import (
 	"shopping/apps/monitor_server/models"
 )
 
+// GetUserLog 获取用户日志
 func GetUserLog(c *gin.Context) {
 	req := io.GetUserLogReq{}
 	if err := c.ShouldBindJSON(req); err != nil {

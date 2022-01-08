@@ -3,11 +3,12 @@ package mysql
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"go.uber.org/zap"
 	"gopkg.in/ini.v1"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"time"
 
 	. "shopping/utils/log"
 )

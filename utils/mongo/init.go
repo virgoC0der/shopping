@@ -19,7 +19,6 @@ type MongoDBConfig struct {
 	password string `ini:"password"`
 	poolSize uint64 `ini:"pool_size"`
 	timeout  int    `ini:"timeout"`
-	uri      string
 }
 
 const (
@@ -38,29 +37,28 @@ var (
 func Init() error {
 	conf, err := ini.Load(confPath)
 	if err != nil {
-		Logger.Warn("load mysql config failed, err", zap.Error(err))
+		Logger.Warn("load mongo config failed, err", zap.Error(err))
 		return err
 	}
 
 	opt := &MongoDBConfig{}
 	if err = conf.MapTo(opt); err != nil {
-		Logger.Warn("map mysql config to struct failed, err", zap.Error(err))
+		Logger.Warn("map mongo config to struct failed, err", zap.Error(err))
 		return err
 	}
 
 	Logger.Info("mongo config", zap.Any("opt", opt))
-	opt.uri = fmt.Sprintf(kMongoUriTemplate, opt.username, opt.password, opt.host)
-	Logger.Info("mongo uri", zap.String("uri", opt.uri))
+	uri := fmt.Sprintf(kMongoUriTemplate, opt.username, opt.password, opt.host)
+	Logger.Info("mongo uri", zap.String("uri", uri))
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err = mongo.Connect(ctx, options.Client().ApplyURI(opt.uri).SetMaxPoolSize(opt.poolSize))
+	client, err = mongo.Connect(ctx, options.Client().ApplyURI(uri).SetMaxPoolSize(opt.poolSize))
 	if err != nil {
 		Logger.Warn("connect mongodb err", zap.Error(err))
 		return err
 	}
 
 	Timeout = time.Duration(opt.timeout) * time.Second
-
 	InitCollections()
 	return nil
 }

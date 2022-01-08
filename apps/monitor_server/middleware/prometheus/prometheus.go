@@ -69,7 +69,7 @@ func Ignore(path ...string) Option {
 	}
 }
 
-// New new gin prometheus
+// New gin prometheus
 func New(e *gin.Engine, options ...Option) *GinPrometheus {
 	if e == nil {
 		return nil
