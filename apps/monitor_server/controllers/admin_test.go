@@ -1,7 +1,8 @@
 package controllers
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestGetUserLog(t *testing.T) {
-
 }
